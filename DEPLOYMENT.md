@@ -29,6 +29,38 @@ Your app is now ready for Vercel deployment! Here's how to deploy it:
    vercel --prod
    ```
 
+## Environment Variables Setup
+
+### For Database Connection
+
+Before deploying, you need to configure your database environment variables in Vercel:
+
+1. **Go to your Vercel dashboard**
+2. **Select your project**
+3. **Go to Settings > Environment Variables**
+4. **Add the following environment variable**:
+   - **Name**: `DATABASE_URL`
+   - **Value**: `postgres://neondb_owner:npg_N0xrORBH3dbY@ep-solitary-shape-a4ownmga-pooler.us-east-1.aws.neon.tech/neondb?sslmode=require`
+
+### Alternative: Using Vercel CLI
+
+You can also set environment variables using the Vercel CLI:
+
+```bash
+vercel env add DATABASE_URL
+# When prompted, paste your database URL
+```
+
+### Database Setup (Neon PostgreSQL)
+
+Your app is configured to use Neon PostgreSQL. The database credentials are:
+- **Host**: ep-solitary-shape-a4ownmga-pooler.us-east-1.aws.neon.tech
+- **Database**: neondb
+- **User**: neondb_owner
+- **Password**: npg_N0xrORBH3dbY
+
+The application will automatically create the required table (`product_data`) on first use.
+
 ### Option 3: GitHub Integration
 
 1. Go to [vercel.com](https://vercel.com)
@@ -72,6 +104,28 @@ npm run dev
 ```
 
 Your app will be available at `http://localhost:3000`
+
+## Troubleshooting
+
+### Database Connection Issues
+
+If you get errors like `ECONNREFUSED 127.0.0.1:5432`, it means:
+
+1. **Environment variable not set**: Make sure `DATABASE_URL` is configured in Vercel
+2. **Wrong database URL**: Verify the database URL is correct in your environment variables
+3. **Database not accessible**: Check if your Neon database is running and accessible
+
+### Common Error Messages
+
+- `Error: connect ECONNREFUSED 127.0.0.1:5432`: Database URL not configured
+- `Error: getaddrinfo ENOTFOUND`: Invalid database host
+- `Error: password authentication failed`: Wrong credentials
+
+### How to Fix
+
+1. Go to Vercel Dashboard → Your Project → Settings → Environment Variables
+2. Add or update the `DATABASE_URL` variable
+3. Redeploy your application
 
 ## Notes
 

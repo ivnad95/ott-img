@@ -15,6 +15,15 @@ if ! vercel whoami &> /dev/null; then
     vercel login
 fi
 
+# Check if DATABASE_URL environment variable is set
+echo "🗄️  Checking database configuration..."
+if ! vercel env ls | grep -q "DATABASE_URL"; then
+    echo "⚠️  DATABASE_URL not found in Vercel environment variables."
+    echo "🔧 Setting up DATABASE_URL..."
+    echo "Please paste your database URL when prompted:"
+    vercel env add DATABASE_URL
+fi
+
 # Deploy to production
 echo "📦 Deploying to production..."
 vercel --prod
