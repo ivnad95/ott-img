@@ -45,8 +45,8 @@ const productImages = [
 // Size options
 const sizes = ['XXS', 'XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL'];
 
-// Load saved data from localStorage
-let savedData = JSON.parse(localStorage.getItem('ottProductData')) || {};
+// Saved product data loaded from the server
+let savedData = {};
 
 // Generate product cards
 function generateProductCards() {
@@ -176,11 +176,7 @@ async function saveData() {
     try {
         const data = collectFormData();
         
-        // Save to localStorage first (always works)
-        localStorage.setItem('ottProductData', JSON.stringify(data));
-        savedData = data;
-        
-        // Try to send to server API
+        // Send data to the server API
         try {
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
@@ -211,10 +207,9 @@ async function saveData() {
                 throw new Error(`Server responded with ${response.status}: ${errorText}`);
             }
         } catch (fetchError) {
-            // If server save fails, still show success for local save
-            console.warn('Server save failed:', fetchError);
-            saveBtn.innerHTML = `⚠️ Saved Locally (${Object.keys(data).length} products)`;
-            saveBtn.style.background = 'linear-gradient(135deg, #f59e0b, #d97706)';
+            console.error('Server save failed:', fetchError);
+            saveBtn.innerHTML = '❌ Save Failed';
+            saveBtn.style.background = 'linear-gradient(135deg, #ef4444, #dc2626)';
         }
         
     } catch (error) {
@@ -265,14 +260,18 @@ function loadSavedData() {
 // Auto-save functionality
 function setupAutoSave() {
     let autoSaveTimeout;
-    
+
     document.addEventListener('input', function(e) {
         if (e.target.matches('.product-form input')) {
             clearTimeout(autoSaveTimeout);
             autoSaveTimeout = setTimeout(() => {
                 const data = collectFormData();
-                localStorage.setItem('ottProductData', JSON.stringify(data));
-                savedData = data;
+                // silently persist data to the server
+                fetch('/api/save-data', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ data, timestamp: new Date().toISOString() })
+                }).catch(err => console.warn('Auto-save failed:', err));
             }, 2000); // Auto-save after 2 seconds of inactivity
         }
     });
@@ -298,14 +297,7 @@ async function loadDataFromServer() {
         if (response.ok) {
             const result = await response.json();
             if (result.success && result.data) {
-                // Merge server data with local data (local takes precedence)
-                const localData = JSON.parse(localStorage.getItem('ottProductData')) || {};
-                const mergedData = { ...result.data, ...localData };
-                
-                // Update savedData and localStorage
-                savedData = mergedData;
-                localStorage.setItem('ottProductData', JSON.stringify(mergedData));
-                
+                savedData = result.data;
                 console.log('Data loaded from server:', Object.keys(result.data).length, 'products');
                 return true;
             }
@@ -340,6 +332,10 @@ document.addEventListener('DOMContentLoaded', async function() {
 document.addEventListener('visibilitychange', function() {
     if (document.hidden) {
         const data = collectFormData();
-        localStorage.setItem('ottProductData', JSON.stringify(data));
+        fetch('/api/save-data', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ data, timestamp: new Date().toISOString() })
+        }).catch(err => console.warn('Auto-save on hide failed:', err));
     }
 });

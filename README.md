@@ -7,7 +7,7 @@ A modern, responsive web application for managing product inventory and categori
 - 🖼️ **Product Image Management** - Visual product cards with image display
 - 📊 **Inventory Tracking** - Track quantities across all sizes (XXS to XXXL)
 - 🏷️ **Product Categorization** - Mark products as "New" or "Current"
-- 💾 **Auto-Save** - Automatic data persistence with local storage backup
+- 💾 **Auto-Save** - Changes persist automatically to the database
 - 🎨 **Modern UI** - Glassmorphism design with smooth animations
 - 📱 **Responsive** - Works perfectly on desktop and mobile devices
 - ⚡ **Real-time Feedback** - Visual save status and progress indicators
@@ -22,7 +22,7 @@ A modern, responsive web application for managing product inventory and categori
 - **Styling**: Custom CSS with glassmorphism effects
 - **Backend**: Node.js Express (local development)
 - **API**: Vercel Serverless Functions (production)
-- **Storage**: LocalStorage + Server-side persistence
+- **Storage**: PostgreSQL via serverless API
 
 ## 📦 Quick Start
 
@@ -83,8 +83,7 @@ A modern, responsive web application for managing product inventory and categori
 - **Size Inventory**: Track stock for all clothing sizes
 
 ### Data Persistence
-- **Local Storage**: Instant saves to browser storage
-- **Server Backup**: API endpoints for data synchronization
+- **Server API**: All changes are sent directly to the backend
 - **Database**: When `DATABASE_URL` is set, data is stored in PostgreSQL
 - **Auto-Save**: Saves progress automatically after changes
 - **Manual Save**: "Save Progress" button with visual feedback
