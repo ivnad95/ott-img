@@ -18,6 +18,9 @@ yarn-error.log*
 data/
 data.json
 
+# Local development server (not needed for Vercel)
+# server.js
+
 # OS generated files
 .DS_Store
 .DS_Store?
