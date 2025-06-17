@@ -1,5 +1,10 @@
 # Deployment Guide
 
+## Current Setup Status ✅
+Your project is now configured to work in both environments:
+- 🚀 **Local Development**: Express.js server with local data storage
+- ☁️ **Vercel Production**: Serverless functions with same API endpoints
+
 ## Quick Vercel Deployment
 
 Your app is now ready for Vercel deployment! Here's how to deploy it:
