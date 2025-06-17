@@ -6,24 +6,19 @@
   "scripts": {
     "dev": "node server.js",
     "start": "node server.js",
-    "build": "echo 'Static site ready for deployment'",
-    "deploy": "vercel --prod",
-    "vercel-dev": "vercel dev"
+    "build": "echo 'Static site ready for deployment'"
   },
   "keywords": [
     "product-management",
     "inventory",
-    "e-commerce",
-    "vercel"
+    "e-commerce"
   ],
   "author": "Ivan",
   "license": "MIT",
   "dependencies": {
     "express": "^4.18.2"
   },
-  "devDependencies": {
-    "vercel": "^32.0.0"
-  },
+  "devDependencies": {},
   "engines": {
     "node": ">=18.x"
   }
