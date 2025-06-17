@@ -1,6 +1,6 @@
 # OTT Product Images Manager
 
-A mobile-friendly web application for managing product inventory and categorization. Built with vanilla HTML, CSS, and JavaScript, optimized for Vercel deployment.
+A mobile-friendly web application for managing product inventory and categorization. Built with vanilla HTML, CSS, and JavaScript.
 
 ## Features
 
@@ -13,7 +13,7 @@ A mobile-friendly web application for managing product inventory and categorizat
 
 ## Live Demo
 
-The application is deployed on Vercel and accessible at: [Your Vercel URL]
+The application can be run locally using a simple HTTP server.
 
 ## Local Development
 
@@ -28,20 +28,12 @@ The application is deployed on Vercel and accessible at: [Your Vercel URL]
    npm install
    ```
 
-3. Run locally with Vercel CLI:
+3. Run locally with Python HTTP server:
    ```bash
-   npm run dev
+   npm run start
    ```
 
-4. Open http://localhost:3000 in your browser
-
-## Deployment
-
-The app is configured for automatic deployment on Vercel:
-
-1. Connect your GitHub repository to Vercel
-2. Push changes to the main branch
-3. Vercel will automatically build and deploy
+4. Open http://localhost:8000 in your browser
 
 ## Data Storage
 
@@ -63,7 +55,6 @@ The app is configured for automatic deployment on Vercel:
 ├── api/
 │   ├── save-data.js    # Save data API endpoint
 │   └── get-data.js     # Get data API endpoint
-├── vercel.json         # Vercel configuration
 ├── package.json        # Node.js dependencies
 └── [product-images]    # Product image files
 ```

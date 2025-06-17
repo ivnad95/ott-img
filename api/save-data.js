@@ -1,4 +1,4 @@
-// Vercel serverless function to save product data
+// API endpoint to save product data
 export default async function handler(req, res) {
     // Set CORS headers
     res.setHeader('Access-Control-Allow-Origin', '*');

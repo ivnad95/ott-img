@@ -4,20 +4,16 @@
   "description": "OTT Product Images Manager - A web application for managing product inventory and categorization",
   "main": "index.html",
   "scripts": {
-    "dev": "vercel dev",
-    "build": "echo 'Static site - no build needed'",
-    "deploy": "vercel --prod"
+    "start": "python -m http.server 8000",
+    "build": "echo 'Static site - no build needed'"
   },
   "keywords": [
     "product-management",
     "inventory",
-    "e-commerce",
-    "vercel"
+    "e-commerce"
   ],
   "author": "Ivan",
   "license": "MIT",
   "dependencies": {},
-  "devDependencies": {
-    "vercel": "^33.0.0"
-  }
+  "devDependencies": {}
 }
