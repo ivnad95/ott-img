@@ -1,4 +1,22 @@
 // Vercel serverless function to save product data
+const { Pool } = require('pg');
+
+// Use DATABASE_URL provided via environment variables
+const pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+});
+
+// Ensure table exists (called lazily on first request)
+async function ensureTable() {
+    await pool.query(`
+        CREATE TABLE IF NOT EXISTS ott_data (
+            id SERIAL PRIMARY KEY,
+            data JSONB,
+            updated_at TIMESTAMPTZ DEFAULT NOW()
+        )
+    `);
+}
+
 module.exports = async function handler(req, res) {
     // Set CORS headers
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -22,16 +40,15 @@ module.exports = async function handler(req, res) {
             return res.status(400).json({ error: 'Missing required fields' });
         }
         
-        // For Vercel deployment, we'll use environment variables or external storage
-        // In this case, we'll simulate saving (replace with actual database later)
-        console.log('Product data received:', {
+        // Ensure database table exists and insert data
+        await ensureTable();
+
+        await pool.query('INSERT INTO ott_data (data) VALUES ($1)', [data]);
+
+        console.log('Product data saved:', {
             timestamp,
-            productCount: Object.keys(data).length,
-            sample: Object.keys(data).slice(0, 3) // Log first 3 items for debugging
+            productCount: Object.keys(data).length
         });
-        
-        // Simulate processing time
-        await new Promise(resolve => setTimeout(resolve, 100));
         
         res.status(200).json({
             success: true,

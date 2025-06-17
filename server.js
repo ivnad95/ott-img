@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const fs = require('fs').promises;
+const { Pool } = require('pg');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -22,15 +23,37 @@ app.use((req, res, next) => {
     next();
 });
 
+// Optional Postgres pool for persistence (initialized later)
+let pool;
+
 // File to store data locally
 const DATA_FILE = path.join(__dirname, 'data.json');
 
-// Initialize data file if it doesn't exist
+// Initialize data file or Postgres table
 async function initDataFile() {
+    if (process.env.DATABASE_URL) {
+        try {
+            pool = new Pool({ connectionString: process.env.DATABASE_URL });
+            await pool.query(`
+                CREATE TABLE IF NOT EXISTS ott_data (
+                    id SERIAL PRIMARY KEY,
+                    data JSONB,
+                    updated_at TIMESTAMPTZ DEFAULT NOW()
+                )
+            `);
+            console.log('Connected to PostgreSQL');
+            return;
+        } catch (error) {
+            console.error(
+                '⚠️  PostgreSQL connection failed. Falling back to local file storage:',
+                error.message
+            );
+            pool = null;
+        }
+    }
     try {
         await fs.access(DATA_FILE);
     } catch (error) {
-        // File doesn't exist, create it
         await fs.writeFile(DATA_FILE, JSON.stringify({}), 'utf8');
         console.log('Created data.json file');
     }
@@ -39,8 +62,16 @@ async function initDataFile() {
 // API Routes
 app.get('/api/get-data', async (req, res) => {
     try {
-        const data = await fs.readFile(DATA_FILE, 'utf8');
-        const savedData = JSON.parse(data);
+        let savedData = {};
+        if (pool) {
+            const { rows } = await pool.query(
+                'SELECT data FROM ott_data ORDER BY updated_at DESC LIMIT 1'
+            );
+            savedData = rows[0]?.data || {};
+        } else {
+            const data = await fs.readFile(DATA_FILE, 'utf8');
+            savedData = JSON.parse(data);
+        }
         
         res.status(200).json({
             success: true,
@@ -61,14 +92,18 @@ app.get('/api/get-data', async (req, res) => {
 app.post('/api/save-data', async (req, res) => {
     try {
         const { data, timestamp } = req.body;
-        
+
         if (!data || !timestamp) {
             return res.status(400).json({ error: 'Missing required fields' });
         }
-        
-        // Save data to local file
-        await fs.writeFile(DATA_FILE, JSON.stringify(data, null, 2), 'utf8');
-        
+
+        if (pool) {
+            await pool.query('INSERT INTO ott_data (data) VALUES ($1)', [data]);
+        } else {
+            // Save data to local file
+            await fs.writeFile(DATA_FILE, JSON.stringify(data, null, 2), 'utf8');
+        }
+
         console.log('Product data saved:', {
             timestamp,
             productCount: Object.keys(data).length,
@@ -103,7 +138,11 @@ async function startServer() {
     app.listen(PORT, () => {
         console.log(`🚀 Server running at http://localhost:${PORT}`);
         console.log(`📁 Serving files from: ${__dirname}`);
-        console.log(`💾 Data will be saved to: ${DATA_FILE}`);
+        if (pool) {
+            console.log('💾 Using PostgreSQL for data storage');
+        } else {
+            console.log(`💾 Data will be saved to: ${DATA_FILE}`);
+        }
         console.log('\n🎯 Open http://localhost:3000 in your browser');
     });
 }

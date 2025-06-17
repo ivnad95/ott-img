@@ -85,6 +85,7 @@ A modern, responsive web application for managing product inventory and categori
 ### Data Persistence
 - **Local Storage**: Instant saves to browser storage
 - **Server Backup**: API endpoints for data synchronization
+- **Database**: When `DATABASE_URL` is set, data is stored in PostgreSQL
 - **Auto-Save**: Saves progress automatically after changes
 - **Manual Save**: "Save Progress" button with visual feedback
 
