@@ -178,33 +178,49 @@ async function saveData() {
     try {
         const data = collectFormData();
         
-        // Save to localStorage
+        // Save to localStorage first (always works)
         localStorage.setItem('ottProductData', JSON.stringify(data));
         savedData = data;
         
-        // Send to server API
-        const response = await fetch('/api/save-data', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                data: data,
-                timestamp: new Date().toISOString()
-            })
-        });
-        
-        if (response.ok) {
-            saveStatus.className = 'save-status success';
-            saveStatus.textContent = `✅ Progress saved successfully! (${Object.keys(data).length} products updated)`;
-        } else {
-            throw new Error('Server save failed');
+        // Try to send to server API
+        try {
+            // Create abort controller for timeout (better browser compatibility)
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+            
+            const response = await fetch('/api/save-data', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    data: data,
+                    timestamp: new Date().toISOString()
+                }),
+                signal: controller.signal
+            });
+            
+            clearTimeout(timeoutId);
+            
+            if (response.ok) {
+                const result = await response.json();
+                saveStatus.className = 'save-status success';
+                saveStatus.textContent = `✅ Progress saved successfully! (${Object.keys(data).length} products updated)`;
+            } else {
+                const errorText = await response.text();
+                throw new Error(`Server responded with ${response.status}: ${errorText}`);
+            }
+        } catch (fetchError) {
+            // If server save fails, still show success for local save
+            console.warn('Server save failed:', fetchError);
+            saveStatus.className = 'save-status error';
+            saveStatus.textContent = '⚠️ Saved locally, but server sync failed. Data is still preserved.';
         }
         
     } catch (error) {
         console.error('Save error:', error);
         saveStatus.className = 'save-status error';
-        saveStatus.textContent = '⚠️ Saved locally, but server sync failed. Data is still preserved.';
+        saveStatus.textContent = '❌ Failed to save data. Please try again.';
     } finally {
         saveBtn.disabled = false;
         saveBtn.textContent = 'Save Progress';
@@ -263,8 +279,50 @@ function setupAutoSave() {
     });
 }
 
+// Load data from server
+async function loadDataFromServer() {
+    try {
+        // Create abort controller for timeout (better browser compatibility)
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+        
+        const response = await fetch('/api/get-data', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            signal: controller.signal
+        });
+        
+        clearTimeout(timeoutId);
+        
+        if (response.ok) {
+            const result = await response.json();
+            if (result.success && result.data) {
+                // Merge server data with local data (local takes precedence)
+                const localData = JSON.parse(localStorage.getItem('ottProductData')) || {};
+                const mergedData = { ...result.data, ...localData };
+                
+                // Update savedData and localStorage
+                savedData = mergedData;
+                localStorage.setItem('ottProductData', JSON.stringify(mergedData));
+                
+                console.log('Data loaded from server:', Object.keys(result.data).length, 'products');
+                return true;
+            }
+        }
+    } catch (error) {
+        console.warn('Failed to load data from server:', error);
+    }
+    return false;
+}
+
 // Initialize the application
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function() {
+    // Try to load data from server first
+    const serverDataLoaded = await loadDataFromServer();
+    
+    // Generate product cards and setup handlers
     generateProductCards();
     setupCheckboxHandlers();
     setupAutoSave();
