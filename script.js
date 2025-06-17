@@ -1,45 +1,45 @@
-// Product images list
+// Product images list - using relative paths
 const productImages = [
-    'images/P4290009-Edit copy.jpg',
-    'images/P4290012-Edit 2.jpg',
-    'images/P4290017-Edit 3.jpg',
-    'images/P4290020 copy.jpg',
-    'images/P4290029-Edit.jpg',
-    'images/P4290033-Edit.jpg',
-    'images/P4290035-Edit.jpg',
-    'images/P4290039-Edit.jpg',
-    'images/P4290042-Edit.jpg',
-    'images/P4290043-Edit.jpg',
-    'images/P4290045-Edit.jpg',
-    'images/P4290048-Edit.jpg',
-    'images/P4290049-Edit.jpg',
-    'images/P4290055-Edit.jpg',
-    'images/P4290058-Edit.jpg',
-    'images/P4290059-Edit.jpg',
-    'images/P4290065-Edit.jpg',
-    'images/P4290071-Edit.jpg',
-    'images/P4290072-Edit.jpg',
-    'images/P4290073-Edit.jpg',
-    'images/P4290089-Edit.jpg',
-    'images/P4290091-Edit.jpg',
-    'images/P4290096-Edit.jpg',
-    'images/P4290098-Edit.jpg',
-    'images/P4290100-Edit.jpg',
-    'images/P4290101-Edit.jpg',
-    'images/_A210028-Edit.jpg',
-    'images/_A210032-Edit-Edit2.jpg',
-    'images/_A210032-Edit.jpg',
-    'images/_A210038-Edit.jpg',
-    'images/_A210038-Edit2.jpg',
-    'images/_A220048-Edit.jpg',
-    'images/_A220052-Edit-Edit.jpg',
-    'images/_A220053-Edit-Edit.jpg',
-    'images/_A220057-Edit.jpg',
-    'images/_A220060-Edit.jpg',
-    'images/_A220061-Edit.jpg',
-    'images/_A220066-Edit.jpg',
-    'images/_A220069-Edit.jpg',
-    'images/_A220073-Edit.jpg'
+    './images/P4290009-Edit copy.jpg',
+    './images/P4290012-Edit 2.jpg',
+    './images/P4290017-Edit 3.jpg',
+    './images/P4290020 copy.jpg',
+    './images/P4290029-Edit.jpg',
+    './images/P4290033-Edit.jpg',
+    './images/P4290035-Edit.jpg',
+    './images/P4290039-Edit.jpg',
+    './images/P4290042-Edit.jpg',
+    './images/P4290043-Edit.jpg',
+    './images/P4290045-Edit.jpg',
+    './images/P4290048-Edit.jpg',
+    './images/P4290049-Edit.jpg',
+    './images/P4290055-Edit.jpg',
+    './images/P4290058-Edit.jpg',
+    './images/P4290059-Edit.jpg',
+    './images/P4290065-Edit.jpg',
+    './images/P4290071-Edit.jpg',
+    './images/P4290072-Edit.jpg',
+    './images/P4290073-Edit.jpg',
+    './images/P4290089-Edit.jpg',
+    './images/P4290091-Edit.jpg',
+    './images/P4290096-Edit.jpg',
+    './images/P4290098-Edit.jpg',
+    './images/P4290100-Edit.jpg',
+    './images/P4290101-Edit.jpg',
+    './images/_A210028-Edit.jpg',
+    './images/_A210032-Edit-Edit2.jpg',
+    './images/_A210032-Edit.jpg',
+    './images/_A210038-Edit.jpg',
+    './images/_A210038-Edit2.jpg',
+    './images/_A220048-Edit.jpg',
+    './images/_A220052-Edit-Edit.jpg',
+    './images/_A220053-Edit-Edit.jpg',
+    './images/_A220057-Edit.jpg',
+    './images/_A220060-Edit.jpg',
+    './images/_A220061-Edit.jpg',
+    './images/_A220066-Edit.jpg',
+    './images/_A220069-Edit.jpg',
+    './images/_A220073-Edit.jpg'
 ];
 
 // Size options
@@ -72,7 +72,6 @@ function createProductCardHTML(image, index) {
         
         <form class="product-form" data-image="${image}">
             <div class="form-section">
-                <h3>Product Category</h3>
                 <div class="checkbox-group">
                     <div class="checkbox-item">
                         <input type="checkbox" id="new-${index}" name="category" value="new" 
@@ -88,14 +87,12 @@ function createProductCardHTML(image, index) {
             </div>
             
             <div class="form-section">
-                <h3>Product Name</h3>
                 <input type="text" class="product-name" name="productName" 
                        placeholder="Type product name here..." 
                        value="${savedProduct.productName || ''}">
             </div>
             
             <div class="form-section">
-                <h3>Stock Quantities</h3>
                 <div class="sizes-grid">
                     ${sizes.map(size => `
                         <div class="size-input">
@@ -135,7 +132,6 @@ function collectFormData() {
     
     forms.forEach(form => {
         const image = form.dataset.image;
-        const formData = new FormData(form);
         
         // Get category
         const categoryCheckbox = form.querySelector('input[name="category"]:checked');
@@ -153,7 +149,7 @@ function collectFormData() {
                 sizes[sizeName] = value;
             }
         });
-        
+
         // Only save if there's meaningful data
         if (category || productName || Object.keys(sizes).length > 0) {
             data[image] = {
