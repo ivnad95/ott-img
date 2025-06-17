@@ -23,27 +23,33 @@ app.use((req, res, next) => {
     next();
 });
 
-// Optional Postgres pool for persistence
+// Optional Postgres pool for persistence (initialized later)
 let pool;
-if (process.env.DATABASE_URL) {
-    pool = new Pool({ connectionString: process.env.DATABASE_URL });
-}
 
 // File to store data locally
 const DATA_FILE = path.join(__dirname, 'data.json');
 
-// Initialize data file if it doesn't exist
+// Initialize data file or Postgres table
 async function initDataFile() {
-    if (pool) {
-        // Ensure table exists when using Postgres
-        await pool.query(`
-            CREATE TABLE IF NOT EXISTS ott_data (
-                id SERIAL PRIMARY KEY,
-                data JSONB,
-                updated_at TIMESTAMPTZ DEFAULT NOW()
-            )
-        `);
-        return;
+    if (process.env.DATABASE_URL) {
+        try {
+            pool = new Pool({ connectionString: process.env.DATABASE_URL });
+            await pool.query(`
+                CREATE TABLE IF NOT EXISTS ott_data (
+                    id SERIAL PRIMARY KEY,
+                    data JSONB,
+                    updated_at TIMESTAMPTZ DEFAULT NOW()
+                )
+            `);
+            console.log('Connected to PostgreSQL');
+            return;
+        } catch (error) {
+            console.error(
+                '⚠️  PostgreSQL connection failed. Falling back to local file storage:',
+                error.message
+            );
+            pool = null;
+        }
     }
     try {
         await fs.access(DATA_FILE);
