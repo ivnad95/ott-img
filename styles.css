@@ -22,11 +22,16 @@ header {
     text-align: center;
     margin-bottom: 40px;
     padding: 40px 20px;
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
+    background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjcwIiBoZWlnaHQ9IjQ0NyIgdmlld0JveD0iMCAwIDI3MCA0NDciIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+Cjxmb3JlaWduT2JqZWN0IHg9Ii02IiB5PSItNiIgd2lkdGg9IjI4MiIgaGVpZ2h0PSI0NTkiPjxkaXYgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGh0bWwiIHN0eWxlPSJiYWNrZHJvcC1maWx0ZXI6Ymx1cigzcHgpO2NsaXAtcGF0aDp1cmwoI2JnYmx1cl8wXzE4XzU3Nl9jbGlwX3BhdGgpO2hlaWdodDoxMDAlO3dpZHRoOjEwMCUiPjwvZGl2PjwvZm9yZWlnbk9iamVjdD48ZyBkYXRhLWZpZ21hLWJnLWJsdXItcmFkaXVzPSI2Ij4KPHA1aCBkPSJNMCA9Ljk5OTk5QzAgNC40NzcxNSA0LjQ3NzE1IDAgMTAgMEwyNjAgMEMyNjUuNTIzIDAgMjcwIDQuNDc3MTUgMjcwIDEwTDI3MCA0MzdDMjcwIDQ0Mi41MjMgMjY1LjUyMyA0NDcgMjYwIDQ0N0w5Ljk5OTk5IDQ0N0M0LjQ3NzE1IDQ0NyAwIDQ0Mi41MjMgMCA0MzdMMCA5Ljk5OTk5WiIgZmlsbD0id2hpdGUiIGZpbGwtb3BhY2l0eT0iMC4xIi8+CjxwYXRoIGQ9Ik0xMCAwLjVMMjYwIDAuNUMyNjUuMjQ3IDAuNSAyNjkuNSA0Ljc1MzI5IDI2OS41IDEwTDI2OS41IDQzN0MyNjkuNSA0NDIuMjQ3IDI2NS4yNDcgNDQ2LjUgMjYwIDQ0Ni41TDEwIDQ0Ni41QzQuNzUzMyA0NDYuNSAwLjUgNDQyLjI0NyAwLjUgNDM3TDAuNSAxMEwwLjUxMjY5NSA5LjUxMDc0QzAuNzY3MzM1IDQuNDkxNDIgNC45MTczOSAwLjUgMTAgMC41WiIgc3Ryb2tlPSJncmVlbiIgc3Ryb2tlLW9wYWNpdHk9IjAuMzAiLz4KPC9nPgo8ZGVmcz4KPGNsaXBQYXRoIGlkPSJiZ2JsdXJfMF8xOF81NzZfY2xpcF9wYXRoIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSg2IDYpIj48cGF0aCBkPSJNMCA5Ljk5OTk5QzAgNC40NzcxNSA0LjQ3NzE1IDAgMTAgMEwyNjAgMEMyNjUuNTIzIDAgMjcwIDQuNDc3MTUgMjcwIDEwTDI3MCA0MzdDMjcwIDQ0Mi41MjMgMjY1LjUyMyA0NDcgMjYwIDQ0N0w5Ljk5OTk5IDQ0N0M0LjQ3NzE1IDQ0NyAwIDQ0Mi41MjMgMCA0MzdMMCA5Ljk5OTk5WiIvPgo8L2NsaXBQYXRoPjwvZGVmcz4KPHN2Zz4=');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    backdrop-filter: blur(3px);
     border-radius: 20px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(0, 255, 0, 0.3);
+    position: relative;
+    overflow: hidden;
 }
 
 .logo-container {
@@ -50,12 +55,14 @@ header h1 {
     margin-bottom: 10px;
     font-size: 2.5rem;
     font-weight: 700;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 header p {
-    color: #6c7293;
+    color: #2d3748;
     font-size: 1.1rem;
-    font-weight: 400;
+    font-weight: 500;
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
 }
 
 .products-grid {
@@ -263,27 +270,43 @@ header p {
     position: sticky;
     bottom: 20px;
     text-align: center;
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 -2px 20px rgba(0,0,0,0.1);
+    padding: 15px;
+    border-radius: 15px;
 }
 
 .save-button {
     background: linear-gradient(135deg, #10b981, #1e40af);
     color: white;
     border: none;
-    padding: 15px 40px;
-    font-size: 18px;
+    padding: 12px 30px;
+    font-size: 16px;
     font-weight: 600;
-    border-radius: 50px;
+    border-radius: 25px;
     cursor: pointer;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.save-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
 }
 
 .save-button:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
+    box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+}
+
+.save-button:hover::before {
+    left: 100%;
 }
 
 .save-button:active {
@@ -321,6 +344,12 @@ header p {
     background: #cce8f4;
     color: #0c5460;
     border: 1px solid #b8daff;
+}
+
+/* Animation for save button loading */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
 /* Mobile Responsive */
@@ -382,9 +411,4 @@ header p {
     border-top: 3px solid #10b981;
     border-radius: 50%;
     animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
 }

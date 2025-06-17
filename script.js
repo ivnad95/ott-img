@@ -167,13 +167,11 @@ function collectFormData() {
 // Save data locally and to server
 async function saveData() {
     const saveBtn = document.getElementById('save-btn');
-    const saveStatus = document.getElementById('save-status');
+    const originalText = saveBtn.textContent;
     
     // Show loading state
     saveBtn.disabled = true;
-    saveBtn.innerHTML = '<span class="loading"></span> Saving...';
-    saveStatus.className = 'save-status loading';
-    saveStatus.textContent = 'Saving your progress...';
+    saveBtn.innerHTML = '<span style="display: inline-block; animation: spin 1s linear infinite;">⏳</span> Saving...';
     
     try {
         const data = collectFormData();
@@ -184,7 +182,6 @@ async function saveData() {
         
         // Try to send to server API
         try {
-            // Create abort controller for timeout (better browser compatibility)
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
             
@@ -204,8 +201,11 @@ async function saveData() {
             
             if (response.ok) {
                 const result = await response.json();
-                saveStatus.className = 'save-status success';
-                saveStatus.textContent = `✅ Progress saved successfully! (${Object.keys(data).length} products updated)`;
+                // Success feedback
+                saveBtn.innerHTML = `✅ Saved! (${Object.keys(data).length} products)`;
+                saveBtn.style.background = 'linear-gradient(135deg, #059669, #0f766e)';
+                
+                console.log('Data saved successfully:', result);
             } else {
                 const errorText = await response.text();
                 throw new Error(`Server responded with ${response.status}: ${errorText}`);
@@ -213,23 +213,22 @@ async function saveData() {
         } catch (fetchError) {
             // If server save fails, still show success for local save
             console.warn('Server save failed:', fetchError);
-            saveStatus.className = 'save-status error';
-            saveStatus.textContent = '⚠️ Saved locally, but server sync failed. Data is still preserved.';
+            saveBtn.innerHTML = `⚠️ Saved Locally (${Object.keys(data).length} products)`;
+            saveBtn.style.background = 'linear-gradient(135deg, #f59e0b, #d97706)';
         }
         
     } catch (error) {
         console.error('Save error:', error);
-        saveStatus.className = 'save-status error';
-        saveStatus.textContent = '❌ Failed to save data. Please try again.';
+        saveBtn.innerHTML = '❌ Save Failed';
+        saveBtn.style.background = 'linear-gradient(135deg, #ef4444, #dc2626)';
     } finally {
         saveBtn.disabled = false;
-        saveBtn.textContent = 'Save Progress';
         
-        // Clear status after 5 seconds
+        // Reset button after 3 seconds
         setTimeout(() => {
-            saveStatus.className = 'save-status';
-            saveStatus.textContent = '';
-        }, 5000);
+            saveBtn.textContent = originalText;
+            saveBtn.style.background = 'linear-gradient(135deg, #10b981, #1e40af)';
+        }, 3000);
     }
 }
 
@@ -282,7 +281,7 @@ function setupAutoSave() {
 // Load data from server
 async function loadDataFromServer() {
     try {
-        // Create abort controller for timeout (better browser compatibility)
+        // Create abort controller for timeout (better browser support)
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
         
@@ -330,15 +329,10 @@ document.addEventListener('DOMContentLoaded', async function() {
     // Setup save button
     document.getElementById('save-btn').addEventListener('click', saveData);
     
-    // Show data count on load
+    // Show data count on load in console
     const dataCount = Object.keys(savedData).length;
     if (dataCount > 0) {
-        const saveStatus = document.getElementById('save-status');
-        saveStatus.className = 'save-status';
-        saveStatus.textContent = `📊 ${dataCount} products have saved data`;
-        setTimeout(() => {
-            saveStatus.textContent = '';
-        }, 3000);
+        console.log(`📊 ${dataCount} products have saved data`);
     }
 });
 

@@ -5,23 +5,22 @@ A mobile-friendly web application for managing product inventory and categorizat
 ## Features
 
 - **Mobile-Responsive Grid Layout**: Clean, modern grid that works on all devices
-- **Product Categorization**: Mark products as "New" or "Current" 
+- **Product Categorization**: Mark products as "New" or "Current"
 - **Inventory Management**: Input stock quantities for sizes XXS through XXXL
 - **Auto-Save**: Automatically saves progress locally as you type
-- **Data Persistence**: Saves data in browser localStorage with serverless API support
+- **Data Persistence**: Saves data both locally and to serverless API
 - **Clean UI**: Modern, user-friendly interface with smooth animations
-- **Vercel Deployment**: Serverless functions for scalable deployment
 
 ## Live Demo
 
-🚀 **Deployed on Vercel**: [View Live App](https://product-images-ott.vercel.app)
+The application is deployed on Vercel and can be accessed at your deployment URL.
 
-## Quick Start
+## Local Development
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/ivnad95/product-images-ott.git
-   cd product-images-ott
+   git clone https://github.com/ivnad95/OTT-product-Images.git
+   cd OTT-product-Images
    ```
 
 2. Install dependencies:
@@ -29,42 +28,46 @@ A mobile-friendly web application for managing product inventory and categorizat
    npm install
    ```
 
-3. Run locally with Vercel Dev:
+3. Run locally with Vercel dev server:
    ```bash
    npm run dev
-   # or
-   vercel dev
    ```
 
-4. Open http://localhost:3000 in your browser
+4. Open <http://localhost:3000> in your browser
 
-## Deployment
+## Deployment to Vercel
 
-### Deploy to Vercel
+### Automatic Deployment (Recommended)
+
+1. Push your code to GitHub
+2. Connect your GitHub repository to Vercel
+3. Vercel will automatically deploy on every push to main branch
+
+### Manual Deployment
 
 1. Install Vercel CLI:
    ```bash
-   npm i -g vercel
+   npm install -g vercel
    ```
 
-2. Deploy:
+2. Login to Vercel:
+   ```bash
+   vercel login
+   ```
+
+3. Deploy:
    ```bash
    npm run deploy
    # or
-   vercel --prod
+   ./deploy.sh
    ```
-
-### One-Click Deploy
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/ivnad95/product-images-ott)
 
 ## Architecture
 
-The application uses a **serverless architecture** with:
-
-- **Frontend**: Vanilla HTML, CSS, and JavaScript
+- **Frontend**: Vanilla HTML5, CSS3, JavaScript (ES6+)
 - **Backend**: Vercel Serverless Functions (Node.js)
-- **Storage**: Browser localStorage (with API endpoints for future database integration)
-- **Deployment**: Vercel platform
+- **Storage**: Browser LocalStorage + Serverless API endpoints
+- **Deployment**: Vercel (Static Site + Serverless Functions)
 
 ## API Endpoints
 
@@ -74,9 +77,58 @@ The application uses a **serverless architecture** with:
 ## Data Storage
 
 - **Local Storage**: Data is automatically saved to browser localStorage
-- **Serverless Functions**: API endpoints ready for database integration
+- **Serverless API**: Data is sent to Vercel serverless functions
 - **Auto-Save**: Changes are automatically saved locally every 2 seconds
-- **Data Persistence**: Currently uses localStorage; ready for database upgrade
+- **Data Synchronization**: Server data is loaded on startup and merged with local data
+
+## Local Development
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/ivnad95/OTT-product-Images.git
+   cd OTT-product-Images
+   ```
+
+2. Install dependencies (optional):
+   ```bash
+   npm install
+   ```
+
+3. Run the server:
+   ```bash
+   # Using npm script
+   npm start
+   
+   # Or directly with Python
+   python3 server.py
+   
+   # To use a different port
+   python3 server.py 8001
+   ```
+
+4. Open http://localhost:8000 in your browser
+
+## Server Features
+
+The application now includes a full-featured Python server that:
+
+- **Serves static files** (HTML, CSS, JS, images)
+- **Handles API endpoints** for data persistence
+- **Saves data to local JSON files** for development
+- **Supports CORS** for cross-origin requests
+- **Provides proper error handling** and logging
+
+## Data Storage
+
+- **Local Storage**: Data is automatically saved to browser localStorage
+- **Server Storage**: Data is saved to `data/product-data.json` on the server
+- **Auto-Save**: Changes are automatically saved locally every 2 seconds
+- **Data Synchronization**: Server data is loaded on startup and merged with local data
+
+## API Endpoints
+
+- `POST /api/save-data` - Save product data
+- `GET /api/get-data` - Retrieve saved data
 
 ## File Structure
 
@@ -85,12 +137,10 @@ The application uses a **serverless architecture** with:
 ├── styles.css          # CSS styles and responsive design
 ├── script.js           # JavaScript functionality
 ├── api/
-│   ├── save-data.js    # Vercel serverless function to save data
-│   └── get-data.js     # Vercel serverless function to get data
-├── images/             # Product image files
+│   ├── save-data.js    # Save data API endpoint
+│   └── get-data.js     # Get data API endpoint
 ├── package.json        # Node.js dependencies
-├── vercel.json         # Vercel deployment configuration
-└── README.md           # This file
+└── [product-images]    # Product image files
 ```
 
 ## Browser Support
@@ -100,48 +150,14 @@ The application uses a **serverless architecture** with:
 - Firefox 60+
 - Edge 79+
 
-## Development
-
-### Local Development
-```bash
-# Install dependencies
-npm install
-
-# Start development server
-npm run dev
-
-# Build (no build step needed for static files)
-npm run build
-```
-
-### Environment Variables
-For production database integration, you can add environment variables in Vercel:
-- `DATABASE_URL` - Database connection string
-- `API_SECRET` - API authentication secret
-
-## Future Enhancements
-
-- [ ] Database integration (MongoDB, Supabase, or Vercel KV)
-- [ ] User authentication
-- [ ] Image upload functionality
-- [ ] Export data to CSV/Excel
-- [ ] Advanced filtering and search
-- [ ] Real-time collaboration
-
 ## Contributing
 
 1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+2. Create a feature branch
 3. Make your changes
 4. Test on mobile and desktop
-5. Commit your changes (`git commit -m 'Add amazing feature'`)
-6. Push to the branch (`git push origin feature/amazing-feature`)
-7. Open a Pull Request
+5. Submit a pull request
 
 ## License
 
 MIT License - see LICENSE file for details
-
-## Support
-
-If you have any questions or need help, please [open an issue](https://github.com/ivnad95/product-images-ott/issues).
