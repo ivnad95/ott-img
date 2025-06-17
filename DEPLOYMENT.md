@@ -41,13 +41,13 @@ Your app is now ready for Vercel deployment! Here's how to deploy it:
 ✅ **Mobile-responsive product image gallery**  
 ✅ **Product categorization** (New/Current)  
 ✅ **Inventory management** (Size inputs XXS-XXXL)  
-✅ **Auto-save functionality** (localStorage)  
+✅ **Auto-save functionality** (server-side)
 ✅ **Serverless API endpoints**  
 ✅ **Modern glassmorphism UI**  
 
 ## Data Persistence
 
-- **Currently**: Uses browser localStorage for data persistence
+- **Production**: Data saved to PostgreSQL when `DATABASE_URL` is provided
 - **API Endpoints**: Ready for database integration
 - **Future**: Can easily integrate with:
   - Vercel KV
@@ -76,7 +76,6 @@ Your app will be available at `http://localhost:3000`
 ## Notes
 
 - All product images are included in the repository
-- The app works offline (thanks to localStorage)
 - Serverless functions handle API requests
 - Zero configuration needed for Vercel deployment 
 
