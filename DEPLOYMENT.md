@@ -74,3 +74,12 @@ Your app will be available at `http://localhost:3000`
 - The app works offline (thanks to localStorage)
 - Serverless functions handle API requests
 - Zero configuration needed for Vercel deployment 
+
+## Deployment Script
+
+You can use the deployment script to deploy your app:
+```bash
+./deploy.sh
+```
+
+This script will handle the deployment process for you, ensuring that your app is deployed successfully. 
